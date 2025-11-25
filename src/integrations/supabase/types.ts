@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      compound_words: {
+        Row: {
+          compound: string
+          compound_tr: string
+          created_at: string
+          id: string
+          word1: string
+          word1_tr: string
+          word2: string
+          word2_tr: string
+        }
+        Insert: {
+          compound: string
+          compound_tr: string
+          created_at?: string
+          id?: string
+          word1: string
+          word1_tr: string
+          word2: string
+          word2_tr: string
+        }
+        Update: {
+          compound?: string
+          compound_tr?: string
+          created_at?: string
+          id?: string
+          word1?: string
+          word1_tr?: string
+          word2?: string
+          word2_tr?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
