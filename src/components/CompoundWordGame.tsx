@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface CompoundWord {
   id: string;
@@ -33,27 +34,28 @@ export const CompoundWordGame = () => {
   const loadNextWord = async () => {
     setLoading(true);
     try {
-      // TODO: Call edge function to get a new compound word from AI
-      // For now, using mock data
-      const mockWord: CompoundWord = {
-        id: Date.now().toString(),
-        word1: 'butter',
-        word2: 'fly',
-        compound: 'butterfly',
-        word1_tr: 'tereyağı',
-        word2_tr: 'uçmak',
-        compound_tr: 'kelebek'
-      };
+      const { data, error } = await supabase.functions.invoke('generate-compound-word');
       
-      setCurrentWord(mockWord);
+      if (error) {
+        console.error('Error generating word:', error);
+        throw error;
+      }
+
+      if (!data) {
+        throw new Error('No data returned from function');
+      }
+
+      setCurrentWord(data as CompoundWord);
       setLeftCardState('front');
       setRightCardState('front');
       setMergedState('hidden');
       setLoading(false);
     } catch (error) {
+      console.error('Error in loadNextWord:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load word. Please try again.';
       toast({
         title: "Error",
-        description: "Failed to load word",
+        description: errorMessage,
         variant: "destructive"
       });
       setLoading(false);

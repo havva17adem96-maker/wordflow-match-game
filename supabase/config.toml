@@ -1,1 +1,4 @@
 project_id = "sayodxnicmtqpjbcorqr"
+
+[functions.generate-compound-word]
+verify_jwt = false
