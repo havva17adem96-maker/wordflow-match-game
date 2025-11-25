@@ -1,7 +1,7 @@
-import { WordMatchGame } from "@/components/WordMatchGame";
+import Home from "./Home";
 
 const Index = () => {
-  return <WordMatchGame />;
+  return <Home />;
 };
 
 export default Index;
