@@ -110,8 +110,13 @@ Example format:
       }
 
       try {
-        // Parse the JSON from AI response
-        const generatedWord = JSON.parse(content.trim());
+        // Parse the JSON from AI response, removing markdown code fences if present
+        let jsonContent = content.trim();
+        if (jsonContent.startsWith('```')) {
+          // Remove markdown code fences
+          jsonContent = jsonContent.replace(/^```json?\n?/, '').replace(/\n?```$/, '');
+        }
+        const generatedWord = JSON.parse(jsonContent.trim());
         
         // Validate the generated word
         if (!generatedWord.word1 || !generatedWord.word2 || !generatedWord.compound ||
