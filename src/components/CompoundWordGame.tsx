@@ -38,6 +38,29 @@ export const CompoundWordGame = () => {
       
       if (error) {
         console.error('Error generating word:', error);
+        
+        // Check if it's a rate limit error (429)
+        if (error.message?.includes('Rate limit') || error.message?.includes('429')) {
+          toast({
+            title: "Rate Limit Reached",
+            description: "Too many requests. Please wait a moment and try again.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
+        
+        // Check if it's a payment required error (402)
+        if (error.message?.includes('Payment required') || error.message?.includes('402')) {
+          toast({
+            title: "Credits Needed",
+            description: "Please add credits to your Lovable AI workspace to continue.",
+            variant: "destructive"
+          });
+          setLoading(false);
+          return;
+        }
+        
         throw error;
       }
 
